@@ -1,0 +1,62 @@
+version: '3.6'
+
+services:
+
+  guacd:
+    image: darksimpson/guacd:1.1.0
+    hostname: guacd
+    restart: always
+#    environment:
+#      - GUACD_LOG_LEVEL=debug
+    volumes:
+      - type: tmpfs
+        target: /guacdisk1
+        tmpfs:
+          size: 104857600
+
+  mysql:
+    image: yobasystems/alpine-mariadb:latest
+    hostname: mysql
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=ROOTPASSWORD
+      - MYSQL_DATABASE=guacamole
+      - MYSQL_USER=guacamole
+      - MYSQL_PASSWORD=GUACPASSWORD
+    volumes:
+      - ./mysql_data:/var/lib/mysql
+      - ./guacamole-my-lowmem.cnf:/etc/my.cnf:ro
+      - ./guacamole-init-1.1.0.sql:/docker-entrypoint-initdb.d/guacamole-init-1.1.0.sql:ro
+
+  guacamole:
+    image: tomcat:jre8-alpine
+    hostname: guacamole
+    restart: always
+    environment:
+      - GUACAMOLE_HOME=/guacamole
+      - MYSQL_DATABASE=guacamole
+      - MYSQL_USERNAME=guacamole
+      - MYSQL_PASSWORD=GUACPASSWORD
+    tmpfs:
+      - /usr/local/tomcat/webapps
+    volumes:
+      - ./client/guacamole-1.1.0.war:/usr/local/tomcat/webapps/ROOT.war:ro
+      - ./client/guacamole-auth-jdbc-mysql-1.1.0.jar:/guacamole/extensions/guacamole-auth-jdbc-mysql-1.1.0.jar:ro
+      - ./client/mysql-connector-java-8.0.19.jar:/guacamole/lib/mysql-connector-java-8.0.19.jar:ro
+      - ./guacamole.properties:/guacamole/guacamole.properties:ro
+    links:
+      - guacd
+      - mysql
+    ports:
+      - 3010:8080
+
+#  adminer:
+#    image: adminer:latest
+#    hostname: adminer
+#    restart: always
+#    environment:
+#     - ADMINER_DEFAULT_SERVER=mysql
+#    links:
+#      - mysql
+#    ports:
+#     - 3011:8080
