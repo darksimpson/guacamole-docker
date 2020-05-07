@@ -45,14 +45,14 @@ As a prerequisites, you need to make a copy of this repo files somewhere in your
 
 	- Change "- 3010:8080" line in "guacamole:" "ports:" section if you want to use HTTP port other than 3010 to access your Guacamole Client.
 **Note**: If you want to setup HTTPS access or other complex configuration you will need to use some HTTP reverse proxy. You can read a bit more about this in Guacamole docs (https://guacamole.apache.org/doc/1.1.0/gug/proxying-guacamole.html).
-Note that in the docs, Guacamole app is accessed with "http://host:port/guacamole/"" and this setup will deploy Guacamole app in web-root, so it must be accessed with "http://host:port/". This was made for simplicity of access and configuration.
-If you setup Guacamole in some environment like Synology DSM, you can use your DSM's GUI control panel to conveniently setup reverse proxy and HTTP access in most cases. If not, you can even add reverse proxy container section in this docker-compose.yml (if you will use proxy only for accessing Guacamole) and setup it for your preferences and convenience. Please lurk deeply about this topic in internets if you want.
+Note that in the docs, Guacamole app is accessed with "http://host:port/guacamole/" and this setup will deploy Guacamole app in web-root, so it must be accessed with "http://host:port/". This was made for simplicity of access and configuration.
+If you setup Guacamole in some environment like Synology DSM, you can use your DSM's GUI control panel to conveniently setup reverse proxy and HTTPS access in most cases. If not, you can even add reverse proxy container section in this docker-compose.yml (if you will use proxy only for accessing Guacamole) and setup it for your preferences and convenience. Please lurk deeply about this topic in internets if you want.
 
-	- You can uncomment "adminer:" section if you want to look inside your Guacamole database or made backups/restores/edits with simplicity of Adminer web GUI. You will also need to edit "- 3011:8080" in "ports:" section of "adminer:" if you want to change Adminer's HTTP GUI port. If you enable Adminer you will be able to access database with host: mysql, port: 3306, database: guacamole, user: guacamole and your "MYSQL_PASSWORD".
+	- You can uncomment "adminer:" section if you want to look inside your Guacamole database or make backups/restores/edits with simplicity of Adminer web GUI. You will also need to edit "- 3011:8080" in "ports:" section of "adminer:" if you want to change Adminer's HTTP GUI port. If you enable Adminer you will be able to access database with host: mysql, port: 3306, database: guacamole, user: guacamole and your "MYSQL_PASSWORD".
 
-7.  Apply a workaround fix for MySQL security-related things in context of configuration files by issuing `chmod 664 guacamole-my-lowmem.cnf` in your copy of this repo directory (i.e. where resides your guacamole-my-lowmem.cnf file)
+7.  Apply a workaround fix for MySQL security-related things about configuration files by issuing `chmod 664 guacamole-my-lowmem.cnf` in your copy of this repo directory (i.e. where resides your guacamole-my-lowmem.cnf file)
 
-**That's all! If all was done right you will now have a working Guacamole setup. Regards!**
+**That's all! If it was done right you will now have a working Guacamole setup. Regards!**
 
 To **run** your Guacamole setup you need to issue `docker-compose up -d` in your copy of this repo directory.
 
